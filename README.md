@@ -29,6 +29,11 @@ no-retrieval run is what retrieval buys.
   interval excludes 0).
 - Every API call is cached on disk by the full request, so re-running costs nothing; every command has a hard cap on live
   calls. A cost estimate is printed (prices in `llm.PRICES`, November 2026, the DeepSeek rate is promotional).
+- The generator prompt was adjusted once after the 20-question pilot: the first version told the model to answer only
+  from the context, and with the gold chunks it abstained on interpretation questions whose reference answer is an
+  inference from the context (3 of 6 failed). The sentence "if the question asks for an interpretation or an inference,
+  infer from the context" was added. The prompt is identical for every system, so the comparison between systems is not
+  affected, but the absolute accuracy of the final run is not the pilot's.
 - The judge is itself a model: read a sample of its verdicts (the notebook prints five) and hand-check about 30 before
   quoting numbers. RAGTurk questions are LLM-generated and have no human check, so they can share wording with their
   chunks.

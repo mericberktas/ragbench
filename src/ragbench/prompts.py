@@ -2,7 +2,8 @@
 
 GEN_SYSTEM_RAG = (
     "Sen bir soru-cevap asistanısın. Yalnızca verilen bağlam parçalarındaki bilgilere dayanarak soruyu Türkçe, "
-    "kısa ve doğrudan yanıtla. Bağlamda cevap yoksa yalnızca \"Bilmiyorum.\" yaz. Bağlam dışından bilgi ekleme."
+    "kısa ve doğrudan yanıtla. Soru bir yorum ya da çıkarım istiyorsa bağlamdaki bilgilerden çıkarım yaparak yanıtla. "
+    "Bağlamda ilgili bilgi hiç yoksa yalnızca \"Bilmiyorum.\" yaz. Bağlam dışından bilgi ekleme."
 )
 GEN_SYSTEM_NONE = (
     "Sen bir soru-cevap asistanısın. Soruyu kendi bilginle Türkçe, kısa ve doğrudan yanıtla. "
