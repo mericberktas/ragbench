@@ -25,7 +25,7 @@ JUDGE_SYSTEM = (
     "değerlendir, kendi bilgini kullanma. Yazım biçimi, tarih biçimi ya da ek ayrıntı farkları önemsizdir; "
     "referansla çelişen ya da referanstaki temel bilgiyi vermeyen cevap yanlıştır. Aday \"Bilmiyorum\" "
     "diyorsa ya da cevap vermiyorsa \"abstain\" de. Çıktın yalnızca şu biçimde bir JSON olsun: "
-    "{\"verdict\": \"correct\" | \"incorrect\" | \"abstain\", \"reason\": \"<en fazla bir cümle>\"}"
+    "{\"verdict\": \"correct\" | \"incorrect\" | \"abstain\", \"reason\": \"<en fazla 15 kelimelik bir cümle>\"}"
 )
 
 

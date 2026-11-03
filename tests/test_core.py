@@ -84,6 +84,10 @@ def test_parse_verdict():
     assert parse_verdict('{"verdict": "correct", "reason": "ok"}') == ("correct", "ok")
     assert parse_verdict('```json\n{"verdict": "Abstain", "reason": ""}\n```')[0] == "abstain"
     assert parse_verdict("not json")[0] == "invalid"
+    # reply cut off inside the reason: the decision before the cut is kept
+    cut = parse_verdict('{"verdict": "incorrect", "reason": "Aday cevap, bronz madalya sayisinin ne zaman')
+    assert cut[0] == "incorrect" and cut[1].startswith("[reply cut off]")
+    assert parse_verdict('{"reason": "no verdict", "ver')[0] == "invalid"
     assert parse_verdict('{"verdict": "maybe"}')[0] == "invalid"
 
 

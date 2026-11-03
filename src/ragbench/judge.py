@@ -22,11 +22,15 @@ def parse_verdict(text: str) -> tuple[str, str]:
                 return verdict, str(obj.get("reason", "")).strip()
         except json.JSONDecodeError:
             pass
-    return "invalid", text.strip()[:200]
+    # a reply cut off after the verdict (the reason ran past max_tokens) still carries the decision
+    cut = re.match(r'\s*\{\s*"verdict"\s*:\s*"(correct|incorrect|abstain)"', text, re.I)
+    if cut:
+        return cut.group(1).lower(), "[reply cut off] " + text.strip()[cut.end():][:200]
+    return "invalid", text.strip()[:500]
 
 
 def judge_answers(client: LLMClient, model: str, questions_by_qid: dict[str, dict], answers: list[dict],
-                  max_tokens: int = 200) -> list[dict]:
+                  max_tokens: int = 400) -> list[dict]:
     messages = [judge_messages(questions_by_qid[a["qid"]]["question"], questions_by_qid[a["qid"]]["answer"], a["answer"])
                 for a in answers]
     outs = client.complete_many(model, messages, temperature=0.0, max_tokens=max_tokens,
@@ -34,5 +38,5 @@ def judge_answers(client: LLMClient, model: str, questions_by_qid: dict[str, dic
     rows = []
     for a, o in zip(answers, outs):
         verdict, reason = parse_verdict(o["text"])
-        rows.append({"qid": a["qid"], "verdict": verdict, "reason": reason})
+        rows.append({"qid": a["qid"], "verdict": verdict, "reason": reason, "finish_reason": o.get("finish_reason")})
     return rows

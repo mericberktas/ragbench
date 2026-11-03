@@ -79,7 +79,8 @@ def cmd_judge(args):
     out = Path(args.out_dir) / "verdicts" / f"{name}.jsonl"
     write_jsonl(out, rows)
     counts = {v: sum(r["verdict"] == v for r in rows) for v in ("correct", "incorrect", "abstain", "invalid")}
-    print(f"{out}: {counts}; {client.summary()}")
+    cut = sum(r.get("finish_reason") == "length" for r in rows)
+    print(f"{out}: {counts} ({cut} replies hit max_tokens); {client.summary()}")
 
 
 def cmd_report(args):
