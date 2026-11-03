@@ -29,9 +29,13 @@ DATA_PATH = f'{DRIVE_ROOT}/data/ragturk/ragturk_formal5k.json'
 REPO = 'https://github.com/mericberktas/ragbench'    # set after the repository is pushed
 EXTRA = '{extra}'
 
-if not Path('/content/ragbench').exists():
-    subprocess.run(['git', 'clone', '--depth', '1', REPO, '/content/ragbench'], check=True)
-subprocess.run([sys.executable, '-m', 'pip', 'install', '-q', '-e', '/content/ragbench' + EXTRA], check=True)
+# clone under a name that is NOT `ragbench`: the notebook's working directory is /content, and a folder called
+# /content/ragbench would shadow the installed package as an empty namespace package
+SRC = '/content/ragbench_src'
+if not Path(SRC).exists():
+    subprocess.run(['git', 'clone', '--depth', '1', REPO, SRC], check=True)
+subprocess.run([sys.executable, '-m', 'pip', 'install', '-q', '-e', SRC + EXTRA], check=True)
+import ragbench.data  # fails here, not later, if the install is shadowed
 '''
 
 RETRIEVE = [
