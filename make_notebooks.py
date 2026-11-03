@@ -35,7 +35,13 @@ SRC = '/content/ragbench_src'
 if not Path(SRC).exists():
     subprocess.run(['git', 'clone', '--depth', '1', REPO, SRC], check=True)
 subprocess.run([sys.executable, '-m', 'pip', 'install', '-q', '-e', SRC + EXTRA], check=True)
-import ragbench.data  # fails here, not later, if the install is shadowed
+# the editable install's .pth file is only read when Python starts, so a running session does not see it:
+# put the package folder on the path ourselves
+import importlib
+if f'{SRC}/src' not in sys.path:
+    sys.path.insert(0, f'{SRC}/src')
+importlib.invalidate_caches()
+import ragbench.data  # fails here, not later, if the package is still not importable
 '''
 
 RETRIEVE = [
